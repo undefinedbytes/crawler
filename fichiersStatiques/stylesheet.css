@@ -1,0 +1,60 @@
+
+body {
+  background:  black;
+  font: 13px Helvetica, Arial;
+}
+
+.banner{
+  background-color: red;
+  border-color: black;
+  border-style:solid;
+  border-width:5px;
+}
+
+.search-container{
+  padding-top: 10px;
+  background-color: yellow;
+  margin-right: 10px;
+  padding: 30px;
+}
+
+.search-bar{
+  width: 800px;
+  font-size: 15pt;
+  margin-left: 135px;
+  }
+
+.event-container{
+  margin-left: 150px;
+  margin-right: 150px;
+  background-color: blue;
+}
+
+.event-object{
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: green;
+  padding-bottom: 15px;
+  margin-left: 20px;
+}
+.text-zone{
+  padding-left: 10px;
+
+  background: orange;
+}
+
+.name{
+  padding-top: 10px;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 30px;
+}
+}
+
+.date{}
+
+.address{}
+
+.phone{}
+
+.sujet{}

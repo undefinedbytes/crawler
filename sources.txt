@@ -1,0 +1,10 @@
+https://socket.io/get-started/chat/
+https://www.npmjs.com/package/socket.io-client
+https://scotch.io/tutorials/scraping-the-web-with-node-js
+http://www.netinstructions.com/how-to-make-a-simple-web-crawler-in-javascript-and-node-js/
+https://code-maven.com/building-a-crawler-in-nodejs
+http://expressjs.com/fr/starter/static-files
+http://stackoverflow.com/questions/10434001/static-files-with-express-js
+https://nodejs.org/docs/v0.6.1/api/timers.html
+http://bluebirdjs.com/docs/api/catch.html
+http://stackoverflow.com/questions/8437352/appending-html-encoded-string-as-html-not-as-text

@@ -1,0 +1,25 @@
+{
+  "name": "webcrawl",
+  "version": "1.0.0",
+  "description": "crawling the web",
+  "main": "firstCrawl.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jothezero/webCrawler.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jothezero/webCrawler/issues"
+  },
+  "homepage": "https://github.com/jothezero/webCrawler#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "pug": "^2.0.0-beta11",
+    "request-promise": "^4.2.0",
+    "socket.io": "^1.7.3"
+  }
+}

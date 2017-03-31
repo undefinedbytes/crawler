@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+     <meta charset="UTF-8"></meta>
+    <title>Évènements Gatineau/Ottawa</title>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <div class="banner">
+      <img src="banner.jpg" height="250" width="925" alt="Banner"></img>
+    </div>
+    <div class="search-container">
+      <form>
+      <input id="input-search" class="search-bar" type="text" autocomplete='off'/>
+      </form>
+    </div>
+      <div id="event-container" class="event-container">
+      </div>
+    <script>
+    $(function() {
+      var socket = io();
+      socket.on('info loaded', function(message){
+        $('#event-container').append(message);
+      });
+    });
+    </script>
+  </body>
+</html>
