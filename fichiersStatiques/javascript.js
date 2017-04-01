@@ -14,3 +14,17 @@ var stringHtml = "<div class='event-object'><div class='image'><img src='"+ obje
 
     return stringHtml;
 }
+
+function buildStatus(compteur){
+
+  var div = document.createElement("div")
+  div.id = "status";
+  div.className = "status";
+  var statusText= document.createTextNode("Pages chargées : " + compteur);
+
+  div.append(statusText);
+
+  return div;
+
+
+}

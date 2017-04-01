@@ -41,13 +41,16 @@ app.get('/', function(req,res){
 
       compteur++;
       console.log("fichiers chargés : " + compteur);
+
+      //Affichage du nombre de pages chargés sur le doc
+      io.emit('loading', compteur);
+      //Push l'objet event dans un array d'evenements principal
       evenements.push(singleInfoObject);
 
       if(compteur >= (linkList.length)) {
         console.log("All files loaded total : " + evenements.length);
         evenements = scrape.changerUndefinedDoubleArray(evenements);
-        //  scrape.displayOnConsole(evenements);
-        //console.log(evenements[1].name);
+
 
         for(i in evenements){
           if(evenements[i].valid)
@@ -61,19 +64,7 @@ app.get('/', function(req,res){
       Les éléments d'information sont l'url de source, le nom, l'adresse, # de téléphone, l'url évènement,
       date, un résumé, et un lien image.
       */
-      /*
-      Installer un timeOut dans les cas où tout les fichiers ne se chargent pas
-      Set un boolean à true et le if trigger, clear timeout dans le if.
-      */
 
-      /*  res.write("<html><head>Tourisme Ottawa et Gatineau</head><body>");
-      for(i in eventMainObject){
-      for(j in eventMainObject[i]){
-      res.write("<h5>" + eventMainObject[i][j] + "</h5>");
-    }
-  }
-
-  */
     });
   });
 });

@@ -20,13 +20,19 @@
       <div id="event-container" class="event-container">
       </div>
     <script>
+
+
     $(function() {
       var socket = io();
       socket.on('info loaded', function(object){
+        //$('#status').remove();
         $('#event-container').append(buildReceivedObject(object));
-          //Recoit object fait appel a build html dans javascript.js
+          //Recoit object fait appel a buildReceivedObject dans javascript.js
           //buildHtml();
-
+      });
+      socket.on('loading', function(compteur){
+        $('#status').remove();
+      document.getElementById("event-container").append(buildStatus(compteur));
 
 
       });

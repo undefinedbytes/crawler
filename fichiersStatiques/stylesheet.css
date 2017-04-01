@@ -25,10 +25,18 @@ body {
   }
 
 .event-container{
-  
+
   margin-left: 150px;
   margin-right: 150px;
   background-color: blue;
+}
+
+.status{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 15pt;
+  background-color: red;
+  padding-left: 20px;
 }
 
 .event-object{
