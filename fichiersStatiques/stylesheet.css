@@ -25,6 +25,7 @@ body {
   }
 
 .event-container{
+  
   margin-left: 150px;
   margin-right: 150px;
   background-color: blue;
@@ -37,14 +38,19 @@ body {
   padding-bottom: 15px;
   margin-left: 20px;
 }
-.text-zone{
-  padding-left: 10px;
 
+.image{
+    padding-bottom: 15px;
+}
+
+.text-zone{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
   background: orange;
 }
 
 .name{
-  padding-top: 10px;
 	font-size: 18px;
 	font-weight: 700;
 	line-height: 30px;

@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src = "javascript.js"></script>
   </head>
   <body>
     <div class="banner">
@@ -22,9 +23,9 @@
     $(function() {
       var socket = io();
       socket.on('info loaded', function(object){
-        $('#event-container').append(object);
+        $('#event-container').append(buildReceivedObject(object));
           //Recoit object fait appel a build html dans javascript.js
-          //buildHtml();   
+          //buildHtml();
 
 
 

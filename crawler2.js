@@ -51,7 +51,7 @@ app.get('/', function(req,res){
 
         for(i in evenements){
           if(evenements[i].valid)
-          io.emit('info loaded', buildHtml(evenements[i]));
+          io.emit('info loaded', evenements[i]);
         }
 
       }
@@ -80,23 +80,7 @@ app.get('/', function(req,res){
 
 http.listen(PORT);
 
-//Faire du cote client, envoyer seulement l'objet principal
-function buildHtml(object){
-  var stringHtml = "<div class='event-object'><img src='"+ object.image
-  +"' height = '250' alt='Non disponible' onerror=this.src='Photo_non_disponible.png'></img><div class='text-zone'><div class='name'>"
-  + object.name + "</div><div class='date'>" + object.date +
-   "</div><div class='address'>" + object.address + "</div><div class='phone'>"
-   + object.telephone + "</div><div class='website'><a href='" + object.website + "'>Site Internet</a>" +
-  "</div><div class='sujet'>" + object.sujet + "</div></div></div>";
 
-
-
-
-
-//<div>"+ object.source + "</div><div>"+ object.image +"</div>
-
-  return stringHtml
-}
 
 /*
 Permet de récupérer les liens sur la page main. Les liens servent à obtenir plus d'information
