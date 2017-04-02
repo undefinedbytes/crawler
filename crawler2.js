@@ -20,6 +20,7 @@ var url = "https://www.tourismeottawa.ca/evenements/";
 var compteur = 0;
 var timeOut = false;
 var evenements = [];
+var indexSansImage = [];
 
 
 app.use(express.static('fichiersStatiques'));
@@ -53,8 +54,15 @@ app.get('/', function(req,res){
 
 
         for(i in evenements){
-          if(evenements[i].valid)
+          if(evenements[i].image == "Non disponible"){
+            indexSansImage.push(i);
+          }
+          else if(evenements[i].valid)
           io.emit('info loaded', evenements[i]);
+        }
+        for(i in indexSansImage){
+          if(evenements[i].valid)
+          io.emit('info loaded', evenements[indexSansImage[i]]);
         }
 
       }
