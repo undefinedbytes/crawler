@@ -21,20 +21,20 @@
       </div>
     <script>
 
-
     $(function() {
       var socket = io();
+      //Chargement des informations sur la page
       socket.on('info loaded', function(object){
-        //$('#status').remove();
-        $('#event-container').append(buildReceivedObject(object));
-          //Recoit object fait appel a buildReceivedObject dans javascript.js
-          //buildHtml();
+        appendEvenement(object);
       });
+      //Chargement des pages
       socket.on('loading', function(compteur){
-        $('#status').remove();
-      document.getElementById("event-container").append(buildStatus(compteur));
-
-
+        updateStatus(compteur);
+      });
+      //Lorsque input search
+      $('#input-search').on('input', function(event){
+        $('#event-container').empty();
+        socket.emit('search',$('#input-search').val());
       });
     });
     </script>

@@ -20,64 +20,114 @@ var url = "https://www.tourismeottawa.ca/evenements/";
 var compteur = 0;
 var timeOut = false;
 var evenements = [];
-var indexSansImage = [];
-
+var searchKey = "";
+var allSended = false;
 
 app.use(express.static('fichiersStatiques'));
 
 app.get('/', function(req,res){
+  //Input search de l'utilsateur
+  io.on('connection', function(socket){
+    socket.on('search', function(search){
+      searchKey = search;
+      if(allSended){
+        sendToClient(evenements);
+      }
+      
+      //updater un filter qui choisi les send
+      //Jquery client retirant les evenements et les reappend
+    });
 
+  });
   res.sendFile( __dirname + "/acceuil.html");
   console.log("Here");
   //res.set('Content-Type', 'text/html; charset=utf-8');
 
+
+  //scrapeWebPage recupere les liens sur la page d'acceuil du site d'evenemtns
+  //Function qui se fait callback avec une liste de liens
   scrapeWebPage( function(linkList) {
-
-
-
 
     console.log(linkList.length);
 
+    //scrapeSpecificInfo recoit comme argument la liste de liens des pages a trouver
+    //Le callback recoit un evenement sous forme d'objet
     scrapeSpecificInfo(linkList, function(singleInfoObject){
-
-      compteur++;
-      console.log("fichiers chargés : " + compteur);
-
-      //Affichage du nombre de pages chargés sur le doc
-      io.emit('loading', compteur);
-      //Push l'objet event dans un array d'evenements principal
-      evenements.push(singleInfoObject);
-
-      if(compteur >= (linkList.length)) {
-        console.log("All files loaded total : " + evenements.length);
-        evenements = scrape.changerUndefinedDoubleArray(evenements);
-
-
-        for(i in evenements){
-          if(evenements[i].image == "Non disponible"){
-            indexSansImage.push(i);
-          }
-          else if(evenements[i].valid)
-          io.emit('info loaded', evenements[i]);
-        }
-        for(i in indexSansImage){
-          if(evenements[i].valid)
-          io.emit('info loaded', evenements[indexSansImage[i]]);
-        }
-
-      }
-
-      /*Lorsque le compteur est équivalent a la longueur de l'array, les éléments sont chargés.
-      À partie de ce moment, je peux travailler sur les éléments un par un
-      Les éléments d'information sont l'url de source, le nom, l'adresse, # de téléphone, l'url évènement,
-      date, un résumé, et un lien image.
-      */
-
+      buildMainObject(singleInfoObject, linkList.length);
     });
+
   });
+
 });
 
 http.listen(PORT);
+
+
+/*Lorsque le compteur est équivalent a la longueur de l'array, les éléments sont chargés.
+À partie de ce moment, je peux travailler sur les éléments un par un
+Les éléments d'information sont l'url de source, le nom, l'adresse, # de téléphone, l'url évènement,
+date, un résumé, et un lien image.
+*/
+function buildMainObject(object, length){
+
+  compteur++;
+  console.log("fichiers chargés : " + compteur);
+
+  //Affichage du nombre de pages chargés sur le doc
+  io.emit('loading', compteur);
+  //Push l'objet event dans un array d'evenements principal
+  evenements.push(object);
+
+
+  //lorsque length sont égaux, toutes les pages sont chargées
+  if(compteur >= length) {
+    console.log("All files loaded total : " + evenements.length);
+    evenements = scrape.changerUndefinedDoubleArray(evenements);
+    sendToClient(evenements);
+  }
+}
+
+function sendToClient(evenements){
+  var indexSansImage = [];
+
+  for(i in evenements){
+
+    if(evenements[i].valid){
+      if(isSearched(evenements[i]))
+      {
+        if(evenements[i].image == "Non disponible"){
+          indexSansImage.push(i);
+        }
+        else
+        io.emit('info loaded', evenements[i]);
+      }
+    }
+  }
+
+  for(i in indexSansImage){
+    if(evenements[indexSansImage[i]].valid)
+    io.emit('info loaded', evenements[indexSansImage[i]]);
+  }
+  allSended = true;
+}
+
+
+function isSearched(array){
+  //  console.log(searchKey);
+  if(searchKey === ""){
+    return true;
+  }
+
+  for(var i in array){
+    if(typeof array[i] === 'string'){
+      if(array[i].includes(searchKey)){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 
 
 
@@ -132,7 +182,7 @@ function scrapeWebPage(callBackFirst){
 
         if(typeof date !== 'undefined' && date !== "")
         {
-        informations[0] =  date;
+          informations[0] =  date;
         }
         else {
           if(typeof dateAlt !== 'undefined' && dateAlt !== ""){
@@ -144,7 +194,7 @@ function scrapeWebPage(callBackFirst){
 
         if(typeof adresse !== 'undefined' && adresse !== "")
         {
-        informations[1] =  adresse;
+          informations[1] =  adresse;
         }
         else {
           if(typeof adresseAlt !== 'undefined' && adresseAlt !== ""){
@@ -157,7 +207,7 @@ function scrapeWebPage(callBackFirst){
 
         if(typeof telephone !== 'undefined' && telephone !== "")
         {
-        informations[2] =  telephone;
+          informations[2] =  telephone;
         }
         else {
           if(typeof telephoneAlt !== 'undefined' && telephoneAlt !== ""){
@@ -168,35 +218,35 @@ function scrapeWebPage(callBackFirst){
           }
         }
 
-      callBackSecond({name: $('span.breadcrumb_last').text(), date: informations[0],
-      address : informations[1], telephone : informations[2] , website: $('span.info-item.website').find('a').attr('href'), sujet: $('div[itemprop="description"]').text()
-      , image: $('div.attachment.feature-image').find('img').attr('src'), source: element , valid : true});
-      //sujet: $('div.content-body-inner.content-styles').text()
-    })
-    .catch(function(err){
-      console.log(err);
+        callBackSecond({name: $('span.breadcrumb_last').text(), date: informations[0],
+        address : informations[1], telephone : informations[2] , website: $('span.info-item.website').find('a').attr('href'), sujet: $('div[itemprop="description"]').text()
+        , image: $('div.attachment.feature-image').find('img').attr('src'), source: element , valid : true});
+        //sujet: $('div.content-body-inner.content-styles').text()
+      })
+      .catch(function(err){
+        console.log(err);
 
-      callBackSecond({name: "Non disponible", date: "Non disponible", address : "Non disponible",
-      telephone : "Non disponible", website: "Non disponible", sujet: "Non disponible"
-      ,image: "Non disponible", source: element, valid:false});
+        callBackSecond({name: "Non disponible", date: "Non disponible", address : "Non disponible",
+        telephone : "Non disponible", website: "Non disponible", sujet: "Non disponible"
+        ,image: "Non disponible", source: element, valid:false});
 
+      });
     });
-  });
-}
+  }
 
-//Pour observer le contenu à la console
-/*
-console.log(element);
-console.log($('span.breadcrumb_last').text());
-console.log($('span.info-item.address').text());
-console.log($('span.info-item.telephone').text());
-console.log($('span.info-item.website').find('a').attr('href'));
-console.log($('span.info-item.calendar').text());
-console.log($('div.content-body-inner.content-styles').text());
-console.log($('div.attachment.feature-image').find('img').attr('src'));
-console.log("\n");
-*/
-//Send l'array à callback qui push cet objet dans un array principal
-/*
+  //Pour observer le contenu à la console
+  /*
+  console.log(element);
+  console.log($('span.breadcrumb_last').text());
+  console.log($('span.info-item.address').text());
+  console.log($('span.info-item.telephone').text());
+  console.log($('span.info-item.website').find('a').attr('href'));
+  console.log($('span.info-item.calendar').text());
+  console.log($('div.content-body-inner.content-styles').text());
+  console.log($('div.attachment.feature-image').find('img').attr('src'));
+  console.log("\n");
+  */
+  //Send l'array à callback qui push cet objet dans un array principal
+  /*
 
-*/
+  */

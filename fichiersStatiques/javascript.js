@@ -28,3 +28,13 @@ function buildStatus(compteur){
 
 
 }
+
+function appendEvenement(object){
+  //Recoit object fait appel a buildReceivedObject dans javascript.js
+  $('#event-container').append(buildReceivedObject(object));
+}
+
+function updateStatus(compteur){
+  $('#status').remove();
+document.getElementById("event-container").append(buildStatus(compteur));
+}
