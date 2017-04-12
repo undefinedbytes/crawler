@@ -1,3 +1,8 @@
+var send = () => {
+	$.post( "/txt", { normallog: "", txt: $("#input-search").val() }).done(function( data ) {
+		alert(data);
+	});
+}
 
 function buildReceivedObject(object){
 

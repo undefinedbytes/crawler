@@ -1,0 +1,25 @@
+doctype html
+html
+	head
+		meta(charset="UTF-8")
+		title Évènements Gatineau/Ottawa
+		link(href='stylesheet.css', rel='stylesheet')
+		script(src="jquery-3.2.0.min.js")
+		script(src="javascript.js")
+	body
+		.banner
+			img(src="banner.jpg" height="250" width="925" alt="Banner")
+		.search-container
+		#event-container.event-container
+			for even in evens
+				.event-object
+					.image
+						img(src=even.image height='250' alt='Non disponible')
+					.text-zone
+						div.name #{even.name}
+						div.date #{even.date}
+						div.address #{even.address}
+						div.phone #{even.telephone}
+						div.website
+							a(href=even.website) Site Internet
+						div.sujet #{even.sujet}
