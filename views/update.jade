@@ -1,0 +1,20 @@
+doctype html
+html
+	head
+		meta(charset="UTF-8")
+		title Évènements Gatineau/Ottawa
+		link(href='stylesheet.css', rel='stylesheet')
+		script(src="jquery-3.2.0.min.js")
+		script.
+			var update = function() {
+				$.post( "/update", { }).done(function( data ) {
+					alert(data);
+				});
+			}
+	body
+		.banner
+			img(src="banner.jpg" height="250" width="925" alt="Banner")
+		#event-container.event-container
+			div Il reste #{count} événement(s) à rechercher.
+			div
+				button(onclick='update();') Update

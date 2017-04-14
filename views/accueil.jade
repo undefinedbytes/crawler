@@ -6,10 +6,20 @@ html
 		link(href='stylesheet.css', rel='stylesheet')
 		script(src="jquery-3.2.0.min.js")
 		script(src="javascript.js")
+		script.
+			var search = function() {
+				$.post( "/search", { info : $("#input-search").val() }).done(function( data ) {
+					//var info = $.parseJSON(data);
+					alert(data["info"]);
+					fillInfo(data["info"]);
+				});
+			}
 	body
 		.banner
 			img(src="banner.jpg" height="250" width="925" alt="Banner")
 		.search-container
+			input(id="input-search" class="search-bar" type="text" autocomplete='off')
+			button(onclick="search();") Recherche
 		#event-container.event-container
 			for even in evens
 				.event-object
