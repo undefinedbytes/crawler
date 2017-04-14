@@ -8,29 +8,34 @@ const app = express();
 const http = require('http').Server(app);
 app.set('views', './views');//  répertoire avec fichiers .jade
 app.set('view engine', 'jade');        //  on utilise jade pour 'render'
+app.use(express.static('fichiersStatiques'));
+var bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
+//app.use(express.json());
 
 
 const PORT =1234;
+http.listen(PORT);
 //Imports mes fonctions
 const scrape = require('./scrapeFunction.js');
 
 //Paramètres urls
 var url = "https://www.tourismeottawa.ca/evenements/";
-var compteur = 0;
 var timeOut = false;
 var evenements = [];
-var searchKey = "";
-var allSended = false;
+var notParse = [];
 
-app.use(express.static('fichiersStatiques'));
-
-http.listen(PORT);
-var textLinks = [];
+/*
+Permet de récupérer les liens sur la page main. Les liens servent à obtenir plus d'information
+*/
 request (url, function(err, resp, body) {
-	if(err){return console.error(err);}//compteur++;
+	if(err){return console.error(err);}
       
 	var $ = cheerio.load(body);//Librairie cheerio permet de chargé le corps de la page web dans une variable
-
+	var textLinks = [];
 	//Pour chacun des liens, on les sauvegardes dans un array
 	$('div.link-tile').each( function(index,element){
 		textLinks[index] = $(this).find('a.link-tile-img').attr('href');
@@ -49,25 +54,65 @@ request (url, function(err, resp, body) {
 				evenements.push(val);
 				console.log(evenements.length);
 			}
+			else{
+				notParse.push(val["uri"]);
+			}
 		});
 	}
-	console.log("fin");
 });
-
-
-
 
 app.get('/', function(req,res){
 	res.render("accueil.jade", {evens : evenements});
 });
 
-app.post('/txt', function (req, res) {
-  res.send('POST request to homepage');
+app.get('/admin', function (req, res) {
+	res.render("update.jade", {count : notParse.length});
 });
-/*
-Permet de récupérer les liens sur la page main. Les liens servent à obtenir plus d'information
-*/
-var update
+app.post('/update', function (req, res) {
+	update();
+	res.send('Traitement en cours');
+});
+app.post('/search', function (req, res) {
+	var isGood = [];
+	if(req.body.info === ""){
+		res.json({"info": evenements});
+	}
+	else{
+		var compare = (v1, v2) => {
+			return v1.toLowerCase().includes(v2.toLowerCase());
+		};
+		
+		
+		for(var i = 0;i<evenements.length;i++){
+			if(compare(evenements[i].name, req.body.info) || compare(evenements[i].date, req.body.info) || compare(evenements[i].address, req.body.info)
+				|| compare(evenements[i].sujet, req.body.info) || compare(evenements[i].source, req.body.info)){
+				isGood.push(evenements[i]);
+			}
+		}
+		res.json({"info": isGood});
+	}
+});
+
+var update = () => {
+	var temp = notParse;
+	notParse = [];
+	console.log(temp.length);
+	for(var i = 0;i<temp.length;i++){
+		scrapeSpecificInfo(temp[i], (val) => {
+			if(val["valid"]){
+				if(val["image"] == undefined){
+					val["image"] = "Photo_non_disponible.png";
+				}
+				
+				evenements.push(val);
+				console.log(evenements.length);
+			}
+			else{
+				notParse.push(val["uri"]);
+			}
+		});
+	}
+}
 
 //Recoit un site et renvoi les informations sur le site
 var scrapeSpecificInfo = (element, callBack) => {

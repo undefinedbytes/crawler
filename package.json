@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jothezero/webCrawler#readme",
   "dependencies": {
+    "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "jade": "^1.11.0",
     "pug": "^2.0.0-beta11",
