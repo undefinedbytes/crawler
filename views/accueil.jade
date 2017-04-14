@@ -9,8 +9,6 @@ html
 		script.
 			var search = function() {
 				$.post( "/search", { info : $("#input-search").val() }).done(function( data ) {
-					//var info = $.parseJSON(data);
-					alert(data["info"]);
 					fillInfo(data["info"]);
 				});
 			}
