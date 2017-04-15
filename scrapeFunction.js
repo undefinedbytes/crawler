@@ -1,14 +1,10 @@
-
-
 module.exports = {
-
-//Fonction de nettoyage, recoit un array plus le type de nettoyage à effectuer selon le type d'information
+  //Fonction de nettoyage, recoit un array plus le type de nettoyage à effectuer selon le type d'information
   cleanArray : function (oldArray, typeOfCleanUp) {
 
     var newArr = new Array();
 
     for(var i = 0; i < oldArray.length; i++){
-
       switch (typeOfCleanUp) {
         case "titles":
         oldArray[i] = oldArray[i].replace(/\t/g,'');
@@ -32,45 +28,36 @@ module.exports = {
       }
     }
     return newArr;
-  }
-,
-    sizeError : function(lengthTitles, lengthLinks){
-      if(lengthTitles !== lengthLinks){
-        return 0;
-        console.log("Size don't matches");
+  },
+  
+  sizeError : function(lengthTitles, lengthLinks){
+    if(lengthTitles !== lengthLinks){
+      return 0;
+      console.log("Size don't matches");
+    }
+    else{
+      return lengthLinks;
+    } 
+  },
+  
+  changerUndefinedDoubleArray : function(doubleArray){
+    for(i in doubleArray){
+      for(j in doubleArray[i]){
+        if(typeof doubleArray[i][j] == "undefined" || doubleArray[i][j] === ""){
+          doubleArray[i][j] = "Non disponible";
+        }
       }
-      else
-        return lengthLinks;
     }
-,
-    changerUndefinedDoubleArray : function(doubleArray){
-
-      for(i in doubleArray){
-        for(j in doubleArray[i]){
-          if(typeof doubleArray[i][j] == "undefined" || doubleArray[i][j] === ""){
-            doubleArray[i][j] = "Non disponible";
-            }
-          }
-        }
-      return doubleArray;
+    return doubleArray;
+  },
+  
+  displayOnConsole : function(doubleArray){
+    for(i in doubleArray){
+      console.log(i);
+      for(j in doubleArray[i]){
+        console.log(doubleArray[i][j]);
+      }
+      console.log("\n");
     }
-
-
-
-,
-    displayOnConsole : function(doubleArray){
-
-
-
-      for(i in doubleArray){
-        console.log(i);
-        for(j in doubleArray[i]){
-          console.log(doubleArray[i][j]);
-          }
-          console.log("\n");
-        }
-
-
-    }
-
+  }
 }

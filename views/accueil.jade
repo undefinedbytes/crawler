@@ -14,20 +14,26 @@ html
 			}
 	body
 		.banner
-			img(src="banner.jpg" height="250" width="925" alt="Banner")
-		.search-container
-			input(id="input-search" class="search-bar" type="text" autocomplete='off')
-			button(onclick="search();") Recherche
-		#event-container.event-container
-			for even in evens
-				.event-object
-					.image
-						img(src=even.image height='250' alt='Non disponible')
-					.text-zone
-						div.name #{even.name}
-						div.date #{even.date}
-						div.address #{even.address}
-						div.phone #{even.telephone}
-						div.website
-							a(href=even.website) Site Internet
-						div.sujet #{even.sujet}
+			span Événements à venir
+		.container
+			.search-container
+				input(id="input-search" class="search-bar" type="text" autocomplete='off' placeholder="Initier une recherche...")
+				button(onclick="search();") Recherche
+			#event-container.event-container
+				for even in evens
+					.event-object
+						.image
+							img(src=even.image height='180' alt='Non disponible')
+						.text-zone
+							div.name #{even.name}
+							div.date #{even.date}
+							div.address #{even.address}
+							if even.telephone
+									div.phone Tél: #{even.telephone}
+							div.sujet #{even.sujet}
+							div.website
+								a(class="button" href=even.website target="_blank") Site Internet
+							br(style="clear:both;")
+				br(style="clear:both;")
+			.footer
+				span Créé par Jonathan Fillion, Miguel Charette et Joël Girard.
