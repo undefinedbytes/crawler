@@ -32,7 +32,7 @@ Permet de récupérer les liens sur la page main. Les liens servent à obtenir p
 */
 request (url, function(err, resp, body) {
 	if(err){return console.error(err);}
-      
+
 	var $ = cheerio.load(body);//Librairie cheerio permet de chargé le corps de la page web dans une variable
 	var textLinks = [];
 	//Pour chacun des liens, on les sauvegardes dans un array
@@ -41,15 +41,15 @@ request (url, function(err, resp, body) {
 	});
 	//Fonction de nettoyage qui enleve les non définis
 	textLinks = scrape.cleanArray(textLinks, "undefineds");
-	
+
 	for(var i = 0;i<textLinks.length;i++){
 		scrapeSpecificInfo(textLinks[i], (val) => {
 			if(val["valid"]){
-				
+
 				if(val["image"] == undefined){
 					val["image"] = "Photo_non_disponible.png";
 				}
-				
+
 				evenements.push(val);
 				console.log(evenements.length);
 			}
@@ -80,8 +80,8 @@ app.post('/search', function (req, res) {
 		var compare = (v1, v2) => {
 			return v1.toLowerCase().includes(v2.toLowerCase());
 		};
-		
-		
+
+
 		for(var i = 0;i<evenements.length;i++){
 			if(compare(evenements[i].name, req.body.info) || compare(evenements[i].date, req.body.info) || compare(evenements[i].address, req.body.info)
 				|| compare(evenements[i].sujet, req.body.info) || compare(evenements[i].source, req.body.info)){
@@ -102,7 +102,7 @@ var update = () => {
 				if(val["image"] == undefined){
 					val["image"] = "Photo_non_disponible.png";
 				}
-				
+
 				evenements.push(val);
 				console.log(evenements.length);
 			}
@@ -144,10 +144,10 @@ var scrapeSpecificInfo = (element, callBack) => {
 				return v3;
 			}
 		};
-			
+
 		//triage des données parce que le site web possede 2 set de la meme informations, certains sont définis
 		//D'autres non
-		
+
 		informations[0] = getGoodData(date, dateAlt, $('span.info-item.calendar').text());
 		informations[1] = getGoodData(adresse, adresseAlt, $('span.info-item.address').text());
 		informations[2] = getGoodData(telephone, telephoneAlt, $('span.info-item.telephone').text());
